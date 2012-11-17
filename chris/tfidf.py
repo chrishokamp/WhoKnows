@@ -1,16 +1,31 @@
 #!/usr/bin/python
 
 #tfidf module which takes two vectors and returns cosine similarity
-from math import log, sqrt
+#TODO: change this into a module that builds and persists an idfIndex, and a tfidfIndex
 
+from math import log, sqrt
+import cPickle
+import shelve
 
 
 #TODO: not implemented!!
 #This code uses Ravi's parsing module
+#TODO: move to server module
 #def buildQueryVector(query): 
-	
 
-#first build the idf dictionary
+#TODO: move to ___main___?
+def persistIndexes(dictMatrix):
+	idfIndex, tfIndex = buildIndexes(dictMatrix)
+        tfidfInd = tfidfIndex(idfIndex, tfIndex)	
+	
+	#now persist using cPickle - note: this can also be done in the interpreter
+	invIndexFile = open('idfIndex.db', 'w')
+	tfidfIndexFile = open('tfidfIndex.db', 'w')
+	cPickle.dump(idfIndex, invIndexFile)
+	cPickle.dump(tfidfInd, tfidfIndexFile)	
+
+
+#build the tf and the idf dictionaries
 def buildIndexes(dictMatrix):
 
 	#this returns a dictionary of 
@@ -63,37 +78,3 @@ def tfidfIndex(idfIndex, tfIndex):
 
 	return tfidfIndex	
 		
-
-
-
-
-#COSINE SIMILARITY
-def cosineSim(vec1, vec2): 
-	
-	def dotProduct (vector1, vector2):
-		#vectors are dictionaries
-		#iterate over vector and see if the words exist, if they do, dot product 
-		dotProduct = 0
-		for word in vector1.keys():
-			if (word in vector2):
-				dotProduct += vector1[word] * vector2[word]				
-		return dotProduct
-
-	def eucLen(vector):
-		total = 0
-		for value in vector.keys():
-			total += vector(value)
-
-		return sqrt(total)
-
-	cosSim = dotProduct(vec1, vec2)/(eucLen(vec1) * eucLen(vec2))
-
-	return cosSim 
-
-
-
-
-
-
- 
-

@@ -1,4 +1,14 @@
+Python tfidf module - RD done
 
+Build and test server
+	- takes a query and returns formatted JSON as result
+		- needs a get queryVector def
+	- server loads persisted idf and tfidfIndexes
+	- for the first iteration, just compares every person to the query vector
+	- may need to do some keyword/query expansion to give us more to go on 
+	- output of server must be JSON
+	- could be a list of names/ids, then we go to mySQL to get the columns for that entity
 
+Installation on lit16
 
-Python tfidf module
+Fallback plan

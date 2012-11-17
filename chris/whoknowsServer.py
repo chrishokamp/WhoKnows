@@ -6,15 +6,24 @@ import os
 
 import shelve
 
+import cossineSim
+
 #open the persisted indexes
 #This is a server to a tfidf index
 #TODO: create and shelve these indexes
-#We need this to weight the query terms
-invertedIndex = shelve.open('invertedIndex.db')['1']
+#We need the inverted index to weight the query terms
+idfIndex = shelve.open('idfIndex.db')['1']
 tfidfIndex = shelve.open('tfidfIndex.db')['1']
 
-
 BUFLEN = 256
+
+
+
+
+#TODO: implement using Ravi's code from github
+#def queryVector (rawQuery):
+
+
 
 # handle every client in a separate subprocess
 # to facilitate multiple clients simultaneously
@@ -29,16 +38,14 @@ def handleClientRequest(info, sock_obj, data_root_directory):
              #   break
         data += tempData
 
+	#this is a query string 
 	print 'The data sent to the server was: %s' % data
-        #now send the data to salsa and get the results back
-	result = salsa.querySalsa(data) #should this be salsa.querySalsa(data)?
-	print 'result is: %s' % result
-	#the total number of queries is the last item in list
-	totalNgrams = result.pop()
-	#23.10.12 - trying to fix the AJAX error - Update: tested
-	#TEST
+        #parse query and get a dictionary query[word] = tfidf value
+	query = queryVector(data)#should this be salsa.querySalsa(data)?
+	print 'query vector is: %s' %str(query) 
 	#result = [(56193, 'Page'), (35272, 'sheet'), (6171, 'side')]
-	output = "Total Ngrams in query: " + str(totalNgrams)
+	
+	
 	noSyn = 0
         for syn in result:
 		 #if the score is not 0
